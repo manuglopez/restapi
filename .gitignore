@@ -8,8 +8,11 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+###< My Exclusions ###
 .idea
 .idea/*/**/
+.env
+###> My exclusions ###
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 /phpunit.xml
