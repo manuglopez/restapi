@@ -13,45 +13,45 @@ jobs:
   symfony-tests:
     runs-on: ubuntu-latest
     steps:
-    #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
-    # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
-    # uses: shivammathur/setup-php@v2
-    - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
-      with:
-        php-version: '8.1'
-    - uses: actions/checkout@v3
-    - name: Copy .env.test.local
-      run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
-           php -r "copy('.env.test','.env');"
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Create Database
-      run: |
-        mkdir -p var
-               touch var/testdata.db
-    - name: Certificates Generation
-      run: |
-        mkdir config/jwt
-              touch config/jwt/private-test.pem 
-              touch config/jwt/public-test.pem
-        openssl genrsa -out config/jwt/private-test.pem -aes256 4096
-        openssl rsa -pubout -in config/jwt/private-test.pem -out config/jwt/public-test.pem
-    - name: Create schema
-      run: |
-        php bin/console --env=test doctrine:schema:create
-        php bin/console --env=test doctrine:fixtures:load
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DATABASE_URL: sqlite:///%kernel.project_dir%/var/database.sqlite
-      run: vendor/bin/phpunit
-    - name: PHPStan
-      run: |
-        vendor/bin/phpstan analyse src tests --level 5
+      #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
+      # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
+      # uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+        with:
+          php-version: '8.1'
+      - uses: actions/checkout@v3
+      - name: Copy .env.test.local
+        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
+          php -r "copy('.env.test','.env');"
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Create Database
+        run: |
+          mkdir -p var
+                 touch var/testdata.db
+      - name: Create schema
+        run: |
+          php bin/console --env=test doctrine:schema:create
+          php bin/console --env=test doctrine:fixtures:load
+
+      - name:Certificates Generation
+        run: |
+          bin/console  lexik:jwt:generate-keypair
+          bin/console  lexik:jwt:check-config
+
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DATABASE_URL: sqlite:///%kernel.project_dir%/var/testdata.db
+        run: vendor/bin/phpunit
+      - name: PHPStan
+        run: |
+          vendor/bin/phpstan analyse src tests --level 5
