@@ -11,6 +11,8 @@ Como base he utilizado SQlite,  debido a que es rápida, es un sólo archivo y e
 He usado Doctrine como ORM que se integra con Symfony
 
 
+
+
 ### Bundles instalados
 
 - **Api Platform:**  Usado para generar api resources rápidamente se pueden.
@@ -27,6 +29,27 @@ He usado Doctrine como ORM que se integra con Symfony
         "zenstruck/foundry": "^1.20"
 
 Todos estos pakages en la sección dev de composer se han usado como utilidades para generacion de datos, o bien para mantener la Base de Datos en un estado determinado como Dama, o PhpStan  que se ha logrado un nivel 5 sin errores.
+
+La stateless auth se hace con jwt y el package Lexik
+```
+Generate the SSL keys
+$ php bin/console lexik:jwt:generate-keypair
+Your keys will land in config/jwt/private.pem and config/jwt/public.pem (unless you configured a different path).
+
+Available options:
+
+--skip-if-exists will silently do nothing if keys already exist.
+--overwrite will overwrite your keys if they already exist.
+Otherwise, an error will be raised to prevent you from overwriting your keys accidentally.
+
+Configuration
+Configure the SSL keys path and passphrase in your .env:
+
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=
+```
+
 
 ## Extra
 
