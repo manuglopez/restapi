@@ -7,7 +7,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
-class C_ProductListingFixtures extends Fixture
+class D_EspecialProductListingFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
@@ -18,11 +18,11 @@ class C_ProductListingFixtures extends Fixture
             B_TipoDeIvaFixtures::TIPO_REDUCIDO,
             B_TipoDeIvaFixtures::TIPO_NORMAL,
         ];
-        for ($i = 0; $i < 100; ++$i) {
+        for ($i = 0; $i < 30; ++$i) {
             $keryReferenceToIVA = array_rand($tiposIva);
 
             $product = new ProductListing();
-            $product->setName($faker->words(3, true))
+            $product->setName('Special'.$i)
                 ->setPriceWithoutIva($faker->randomNumber(3, true))
                 ->setTipoDeIva($this->getReference($tiposIva[$keryReferenceToIVA]))
                 ->setDescription($faker->text(250));

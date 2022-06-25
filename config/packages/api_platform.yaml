@@ -1,7 +1,19 @@
 api_platform:
+    swagger:
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+    # The title of the API.
+    title: 'Productos API'
+
+    # The description of the API.
+    description: 'Prueba Técnica Ecommerce API'
+
+    # The version of the API.Semantic Versioning?
+    version: '0.0.1'
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
     patch_formats:
         json: ['application/merge-patch+json']
-    swagger:
         versions: [3]

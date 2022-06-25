@@ -3,23 +3,34 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\SomeRandomController;
 use App\Repository\TipoDeIvaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    itemOperations: [
+        'get' => [
+            'method' => 'GET',
+            'controller' => SomeRandomController::class,
+        ],
+    ],
+)]
 #[ORM\Entity(repositoryClass: TipoDeIvaRepository::class)]
 class TipoDeIva
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    /** @phpstan-ignore-next-line */
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
+    #[Groups('read')]
     #[ORM\Column(type: 'integer')]
     private $value;
 

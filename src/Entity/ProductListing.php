@@ -7,7 +7,22 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ProductListingRepository;
 use Doctrine\ORM\Mapping as ORM;
-#[ApiResource]
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => 'read'],
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_USER')",
+            'normalization_context' => ['groups' => 'write'],
+        ],
+    ],
+    denormalizationContext: ['groups' => ['write']],
+    normalizationContext: ['groups' => ['read']],
+)]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 #[ORM\Entity(repositoryClass: ProductListingRepository::class)]
 class ProductListing
@@ -15,17 +30,27 @@ class ProductListing
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    /** @phpstan-ignore-next-line */
     private $id;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $name;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: 'string', length: 255)]
     private $description;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: 'integer')]
-    private $price;
+    #[Assert\GreaterThan(0)]
+    private $priceWithoutIva;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $priceWithIva;
+
+    #[Groups(['read', 'write'])]
     #[ORM\ManyToOne(targetEntity: TipoDeIva::class, inversedBy: 'productos')]
     #[ORM\JoinColumn(nullable: false)]
     private $tipoDeIva;
@@ -59,16 +84,26 @@ class ProductListing
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPriceWithIva(): ?int
     {
-        return $this->price;
+        return $this->priceWithIva;
     }
 
-    public function setPrice(int $price): self
+    public function setPriceWithIva($priceWithIva): self
     {
-        $this->price = $price;
+        $this->priceWithIva = $priceWithIva;
 
         return $this;
+    }
+
+    #[Groups('read')] // <- MAGIC IS HERE, you can set a group on a method.
+    public function getPrice(): float
+    {
+        $iva = $this->getTipoDeIva()->getValue();
+        $precioSinIva = $this->getPriceWithoutIva();
+        $precio = $precioSinIva * (1 + ($iva / 100.0));
+
+        return round($precio / 100, 2, PHP_ROUND_HALF_UP);
     }
 
     public function getTipoDeIva(): ?TipoDeIva
@@ -79,6 +114,18 @@ class ProductListing
     public function setTipoDeIva(?TipoDeIva $tipoDeIva): self
     {
         $this->tipoDeIva = $tipoDeIva;
+
+        return $this;
+    }
+
+    public function getPriceWithoutIva(): ?int
+    {
+        return $this->priceWithoutIva;
+    }
+
+    public function setPriceWithoutIva(int $priceWithoutIva): self
+    {
+        $this->priceWithoutIva = $priceWithoutIva;
 
         return $this;
     }
