@@ -39,11 +39,13 @@ jobs:
                touch var/testdata.db
     - name: Certificates Generation
       run: |
+        mkdir config/jwt
+              touch config/jwt/private-test.pem 
+              touch config/jwt/public-test.pem
         openssl genrsa -out config/jwt/private-test.pem -aes256 4096
         openssl rsa -pubout -in config/jwt/private-test.pem -out config/jwt/public-test.pem
     - name: Create schema
       run: |
-        mkdir config/jwt
         php bin/console --env=test doctrine:schema:create
         php bin/console --env=test doctrine:fixtures:load
     - name: Execute tests (Unit and Feature tests) via PHPUnit
