@@ -1,5 +1,5 @@
 lexik_jwt_authentication:
     secret_key: '%kernel.project_dir%/config/jwt/private-test.pem'
     public_key: '%kernel.project_dir%/config/jwt/public-test.pem'
-    pass_phrase: '%env(JWT_PASSPHRASE)%'
+    pass_phrase: '671309b9b844c31f1cd38a66d3c4c37c'
     token_ttl: 3600 # in seconds, default is 3600
