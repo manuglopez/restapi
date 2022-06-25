@@ -35,7 +35,8 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Create Database
       run: |
-        php bin/console --env=test doctrine:database:create
+        mkdir -p var
+               touch var/testdata.db
     - name: Certificates Generation
       run: |
         openssl genrsa -out config/jwt/private-test.pem -aes256 4096
