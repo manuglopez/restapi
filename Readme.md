@@ -1,5 +1,6 @@
 
 # Rest API
+![Testing](https://github.com/manuglopez/restapi/actions/workflows/symfony.yml/badge.svg)
 
 Para realizar este proyecto se ha usado symfony 5.4.
 ## Project Setup
