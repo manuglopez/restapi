@@ -39,12 +39,14 @@ jobs:
                  touch var/testdata.db
       - name: Certificates Generation
         run: |
+          export DATABASE_URL='sqlite:///%kernel.project_dir%/var/testdata.db'
           mkdir config/jwt
                 touch config/jwt/private-test.pem 
                 touch config/jwt/public-test.pem
-          php bin/console --env=dev lexik:jwt:generate-keypair
+          php bin/console  lexik:jwt:generate-keypair --overwrite
       - name: Create schema
         run: |
+          export DATABASE_URL='sqlite:///%kernel.project_dir%/var/testdata.db'
           php bin/console --env=dev doctrine:schema:create
           php bin/console --env=dev doctrine:fixtures:load
       - name: Execute tests (Unit and Feature tests) via PHPUnit
