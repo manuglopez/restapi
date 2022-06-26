@@ -41,13 +41,10 @@ jobs:
         run: |
           php bin/console --env=test doctrine:schema:create
           php bin/console --env=test doctrine:fixtures:load
-
       - name:Certificates Generation
         run: |
           bin/console  lexik:jwt:generate-keypair
           bin/console  lexik:jwt:check-config
-
-
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DATABASE_URL: sqlite:///%kernel.project_dir%/var/testdata.db
