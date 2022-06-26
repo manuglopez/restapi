@@ -40,6 +40,9 @@ jobs:
       - name: Certificates Generation
         run: |
           export DATABASE_URL='sqlite:///%kernel.project_dir%/var/testdata.db'
+          export JWT_SECRET_KEY='%kernel.project_dir%/config/jwt/private.pem'
+          export JWT_PUBLIC_KEY='%kernel.project_dir%/config/jwt/public.pem'
+          export JWT_PASSPHRASE='671309b9b844c31f1cd38a66d3c4c37c'
           mkdir config/jwt
                 touch config/jwt/private-test.pem 
                 touch config/jwt/public-test.pem
@@ -47,6 +50,9 @@ jobs:
       - name: Create schema
         run: |
           export DATABASE_URL='sqlite:///%kernel.project_dir%/var/testdata.db'
+          export JWT_SECRET_KEY='%kernel.project_dir%/config/jwt/private.pem'
+          export JWT_PUBLIC_KEY='%kernel.project_dir%/config/jwt/public.pem'
+          export JWT_PASSPHRASE='671309b9b844c31f1cd38a66d3c4c37c'
           php bin/console --env=dev doctrine:schema:create
           php bin/console --env=dev doctrine:fixtures:load
       - name: Execute tests (Unit and Feature tests) via PHPUnit
