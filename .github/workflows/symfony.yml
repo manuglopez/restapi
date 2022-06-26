@@ -53,6 +53,7 @@ jobs:
           export JWT_SECRET_KEY='%kernel.project_dir%/config/jwt/private.pem'
           export JWT_PUBLIC_KEY='%kernel.project_dir%/config/jwt/public.pem'
           export JWT_PASSPHRASE='671309b9b844c31f1cd38a66d3c4c37c'
+          php bin/console --env=test doctrine:database:create
           php bin/console --env=test doctrine:schema:create
           php bin/console --env=test doctrine:fixtures:load
       - name: Execute tests (Unit and Feature tests) via PHPUnit
