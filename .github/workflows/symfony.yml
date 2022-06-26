@@ -58,9 +58,7 @@ jobs:
           php bin/console --env=test doctrine:fixtures:load
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: |
-          php bin/console --env=test doctrine:database:create
-          php bin/console --env=test doctrine:schema:create
-          php bin/console --env=test doctrine:fixtures:load
+          php bin/console --env=test doctrine:fixtures:load --no-interaction 
           vendor/bin/phpunit
       - name: PHPStan
         run: |
