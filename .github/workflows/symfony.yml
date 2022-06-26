@@ -42,14 +42,12 @@ jobs:
           mkdir config/jwt
                 touch config/jwt/private-test.pem 
                 touch config/jwt/public-test.pem
-          php bin/console lexik:jwt:generate-keypair
+          php bin/console --env=test lexik:jwt:generate-keypair
       - name: Create schema
         run: |
           php bin/console --env=test doctrine:schema:create
           php bin/console --env=test doctrine:fixtures:load
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        env:
-          DATABASE_URL: sqlite:///%kernel.project_dir%/var/database.sqlite
         run: vendor/bin/phpunit
       - name: PHPStan
         run: |
