@@ -1,6 +1,7 @@
 
 # Rest API
 ![Testing](https://github.com/manuglopez/restapi/actions/workflows/symfony.yml/badge.svg)
+![PHPStan](https://img.shields.io/badge/PHPStan-Level%205-brightgreen)
 
 Para realizar este proyecto se ha usado symfony 5.4.
 ## Project Setup
