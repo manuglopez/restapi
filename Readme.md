@@ -1,7 +1,7 @@
 
 # Rest API
-![Testing](https://github.com/manuglopez/restapi/actions/workflows/symfony.yml/badge.svg)
-![PHPStan](https://img.shields.io/badge/PHPStan-Level%205-brightgreen)
+[![Testing](https://github.com/manuglopez/restapi/actions/workflows/symfony.yml/badge.svg)](https://github.com/manuglopez/restapi/actions)
+[![PHPStan](https://img.shields.io/badge/PHPStan-Level%205-brightgreen)](https://github.com/manuglopez/restapi/actions)
 
 Para realizar este proyecto se ha usado symfony 5.4.
 ## Project Setup
@@ -79,6 +79,8 @@ php bin/console --env=test doctrine:fixtures:load
 
 He intentado crear un workflow específico para pasar los test en Github, pero sin suerte, xq no logro que la generación de certificados necesarios para los jwt tokens se creen. *(wip)*
 
+### Update:
+*Finalmente se ha implementado la automatización de test y el analisis estático* del código en Github después de cada push.
 
 
 ## Valoración Personal.
